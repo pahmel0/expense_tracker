@@ -21,6 +21,7 @@ class _ExpensesState extends State<Expenses> {
         date: DateTime.now(),
         category: Category.leisure),
   ];
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
