@@ -35,6 +35,31 @@ class _NewExpenseState extends State<NewExpense> {
     super.dispose();
   }
 
+  void _submitExpenseData() {
+    final enteredAmount = double.parse(
+        _amountController.text.isEmpty ? "0" : _amountController.text);
+    final amountIsInvalid = (enteredAmount <= 0);
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Invalid Input"),
+          content: const Text("Please enter valid inputs"),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: const Text("OK"))
+          ],
+        ),
+      );
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,7 +79,7 @@ class _NewExpenseState extends State<NewExpense> {
                   controller: _amountController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                      labelText: "Amount", prefixText: "\$ "),
+                      labelText: "Amount", prefixText: "kr "),
                 ),
               ),
               const SizedBox(width: 16),
@@ -77,8 +102,10 @@ class _NewExpenseState extends State<NewExpense> {
               )
             ],
           ),
+          const SizedBox(height: 16),
           Row(
             children: [
+              //const Text("Category"),
               DropdownButton(
                 value: _selectedCategory,
                 items: Category.values
@@ -106,8 +133,8 @@ class _NewExpenseState extends State<NewExpense> {
                 child: const Text("Cancel"),
               ),
               const SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () {},
+              OutlinedButton(
+                onPressed: _submitExpenseData,
                 child: const Text("Save"),
               ),
             ],
