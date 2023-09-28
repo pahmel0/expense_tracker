@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
+import 'package:flutter/material.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({Key? key}) : super(key: key);
 
   @override
   State<NewExpense> createState() => _NewExpenseState();
@@ -12,13 +12,16 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
+  Category _selectedCategory = Category.leisure;
 
   void _presentDatePicker() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
     final pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now(),
+      initialDate: now,
+      firstDate: firstDate,
+      lastDate: now,
     );
     setState(() {
       _selectedDate = pickedDate;
@@ -41,7 +44,8 @@ class _NewExpenseState extends State<NewExpense> {
           TextField(
             controller: _titleController,
             maxLength: 50,
-            decoration: const InputDecoration(labelText: 'Title'),
+            keyboardType: TextInputType.text,
+            decoration: const InputDecoration(labelText: "Title"),
           ),
           Row(
             children: [
@@ -50,9 +54,7 @@ class _NewExpenseState extends State<NewExpense> {
                   controller: _amountController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    labelText: 'Amount',
-                    prefixText: 'kr ',
-                  ),
+                      labelText: "Amount", prefixText: "\$ "),
                 ),
               ),
               const SizedBox(width: 16),
@@ -63,50 +65,53 @@ class _NewExpenseState extends State<NewExpense> {
                   children: [
                     Text(
                       _selectedDate == null
-                          ? 'No date chosen'
+                          ? "No Date Selected"
                           : formatter.format(_selectedDate!),
                     ),
                     IconButton(
                       onPressed: _presentDatePicker,
-                      icon: const Icon(Icons.calendar_month),
+                      icon: const Icon(Icons.calendar_today),
                     ),
                   ],
                 ),
-              ),
+              )
             ],
           ),
           Row(
             children: [
-              const Text('Category'),
               DropdownButton(
-                items: [
-                  DropdownMenuItem(
-                    child: Text('Work'),
-                    value: 'work',
-                  ),
-                  DropdownMenuItem(
-                    child: Text('Leisure'),
-                    value: 'leisure',
-                  ),
-                ],
-                onChanged: (value) {},
+                value: _selectedCategory,
+                items: Category.values
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category.name.toUpperCase()),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) {
+                    return;
+                  }
+                  setState(() {
+                    _selectedCategory = value;
+                  });
+                },
               ),
-            ],
-          ),
-          Row(
-            children: [
-              ElevatedButton(
+              const Spacer(),
+              OutlinedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel'),
+                child: const Text("Cancel"),
               ),
+              const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {},
-                child: const Text('Add expense'),
+                child: const Text("Save"),
               ),
             ],
-          ),
+          )
         ],
       ),
     );
