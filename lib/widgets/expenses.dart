@@ -11,7 +11,8 @@ class Expenses extends StatefulWidget {
   State<Expenses> createState() => _ExpensesState();
 }
 
-class _ExpensesState extends State<Expenses> {
+class _ExpensesState extends State<Expenses>
+    with SingleTickerProviderStateMixin {
   final List<Expense> _registeredExpenses = [
     Expense(
         title: 'Flutter Course',
@@ -41,6 +42,28 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  //Animattion Controller
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  //Animation Controller
+
   void _removeExpense(Expense expense) {
     final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
@@ -50,7 +73,18 @@ class _ExpensesState extends State<Expenses> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 5),
-        content: Text('${expense.title} removed'),
+        content: Row(
+          children: [
+            // TODO: Fix the animation
+            const CircularProgressIndicator(
+              //value: _animation.value,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Color.fromARGB(255, 250, 247, 247)),
+            ),
+            const SizedBox(width: 16),
+            Text('${expense.title} removed'),
+          ],
+        ),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () {
@@ -65,6 +99,8 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     Widget mainContent = const Center(
       child: Text('No expenses added yet. Start adding some!'),
     );
@@ -86,14 +122,27 @@ class _ExpensesState extends State<Expenses> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Chart(expenses: _registeredExpenses),
-          Expanded(
-            child: mainContent,
-          ),
-        ],
-      ),
+      body: width < 600
+          ? Column(
+              children: [
+                Chart(expenses: _registeredExpenses),
+                Expanded(
+                  child: mainContent,
+                ),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(
+                  child: mainContent,
+                ),
+                const SizedBox(width: 16),
+                SizedBox(
+                  width: 300,
+                  child: Chart(expenses: _registeredExpenses),
+                ),
+              ],
+            ),
     );
   }
 }
