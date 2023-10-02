@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
+import 'package:uuid/uuid.dart';
+
+/// Generates a unique identifier using the Uuid package.
 const uuid = Uuid();
 
+/// A [DateFormat] instance for formatting dates in the format "MM/dd/yyyy".
 final formatter = DateFormat.yMd();
 
+/// An enumeration representing the categories of expenses.
+/// The categories are food, transportation, leisure, and work.
 enum Category { food, transportation, leisure, work }
 
+/// A map of category names to their corresponding icons.
 const categoryIcons = {
   Category.food: Icons.fastfood,
   Category.transportation: Icons.directions_car,
@@ -15,6 +22,7 @@ const categoryIcons = {
   Category.work: Icons.work,
 };
 
+/// A class representing an expense.
 class Expense {
   final String id;
   final String title;
@@ -32,6 +40,7 @@ class Expense {
   String get formattedDate => formatter.format(date);
 }
 
+/// A class representing an expense bucket.
 class ExpenseBucket {
   final Category category;
   final List<Expense> expenses;

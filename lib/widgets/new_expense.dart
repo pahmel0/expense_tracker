@@ -1,6 +1,7 @@
 import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
+/// A stateful widget that represents a form for creating a new expense.
 class NewExpense extends StatefulWidget {
   const NewExpense({Key? key, required this.onAddExpense}) : super(key: key);
 
@@ -10,13 +11,18 @@ class NewExpense extends StatefulWidget {
   State<NewExpense> createState() => _NewExpenseState();
 }
 
+/// The stateful widget for creating a new expense.
 class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
   Category _selectedCategory = Category.food;
 
+  /// Presents a date picker dialog to the user and sets the selected date to the
+  /// `_selectedDate` variable.
   void _presentDatePicker() async {
+    // implementation code here
+
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
     final pickedDate = await showDatePicker(
@@ -37,6 +43,7 @@ class _NewExpenseState extends State<NewExpense> {
     super.dispose();
   }
 
+  /// Submits the expense data to the database.Checks if the data is valid and if not show an alert dialog.
   void _submitExpenseData() {
     final enteredAmount = double.parse(
         _amountController.text.isEmpty ? "0" : _amountController.text);
@@ -71,6 +78,7 @@ class _NewExpenseState extends State<NewExpense> {
     Navigator.pop(context);
   }
 
+  /// Builds the widget UI of add expense overlay
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;

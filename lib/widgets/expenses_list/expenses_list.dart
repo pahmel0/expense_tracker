@@ -2,6 +2,7 @@ import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/widgets/expenses_list/expense_item.dart';
 import 'package:flutter/material.dart';
 
+/// A widget that displays a list of expenses.
 class ExpensesList extends StatelessWidget {
   const ExpensesList(
       {Key? key, required this.expenses, required this.onRemoveExpense})
@@ -9,6 +10,7 @@ class ExpensesList extends StatelessWidget {
   final List<Expense> expenses;
   final void Function(Expense expense) onRemoveExpense;
 
+  /// Builds the list of expenses. Dismisable is used to enable swiping to delete an expense.
   @override
   Widget build(BuildContext context) {
     return ListView.builder(

@@ -1,6 +1,7 @@
 import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
+/// A widget that displays a single expense item in the expenses list.
 class ExpenseItem extends StatelessWidget {
   const ExpenseItem(this.expense, {super.key});
 

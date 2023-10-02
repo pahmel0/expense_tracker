@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 
+/// A stateful widget that displays a list of expenses.
+///
+/// This widget is used to display a list of expenses in the expense tracker app.
+/// It is a stateful widget because the list of expenses can change based on user input.
+/// The widget is located in the `widgets` directory and the file path is `c:\Users\manta\AndroidStudioProjects\expense_tracker\lib\widgets\expenses.dart`.
 class Expenses extends StatefulWidget {
   const Expenses({Key? key}) : super(key: key);
 
@@ -11,8 +16,11 @@ class Expenses extends StatefulWidget {
   State<Expenses> createState() => _ExpensesState();
 }
 
+/// The private state class for the [Expenses] widget.
+
 class _ExpensesState extends State<Expenses>
     with SingleTickerProviderStateMixin {
+  /// The list of expenses that are registered in the app.
   final List<Expense> _registeredExpenses = [
     Expense(
         title: 'Flutter Course',
@@ -26,6 +34,7 @@ class _ExpensesState extends State<Expenses>
         category: Category.leisure),
   ];
 
+  /// Opens the overlay for adding a new expense.
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       useSafeArea: true,
@@ -37,7 +46,10 @@ class _ExpensesState extends State<Expenses>
     );
   }
 
+  /// Adds an [Expense] to the list of expenses.
   void _addExpense(Expense expense) {
+    // implementation details
+
     setState(() {
       _registeredExpenses.add(expense);
     });
@@ -98,6 +110,7 @@ class _ExpensesState extends State<Expenses>
     );
   }
 
+  /// Builds the widget UI of the expenses widget.This is the first widget that is rendered in the app.
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
